@@ -24,6 +24,7 @@ export default function Home({ invertido = 0, ganancia = 0, monedas = [] }) {
               <td className={styles2.header}>MONEDA</td>
               <td className={styles2.header}>INVERTIDO</td>
               <td className={styles2.header}>CANTIDAD</td>
+              <td className={styles2.header}>PRECIO</td>
               <td className={styles2.header}>GANANCIA</td>
             </tr>
             {monedas.map((moneda, i) => (
@@ -31,6 +32,7 @@ export default function Home({ invertido = 0, ganancia = 0, monedas = [] }) {
                 <td className={styles2.mainCell}>{moneda.token}</td>
                 <td className={styles2.cell}>{moneda.invertido}</td>
                 <td className={styles2.cell}>{moneda.qt}</td>
+                <td className={styles2.cell}>{moneda.precioVenta}</td>
                 <td
                   className={styles2.cell}
                   style={{
@@ -49,6 +51,7 @@ export default function Home({ invertido = 0, ganancia = 0, monedas = [] }) {
                 {Math.round(invertido * 100) / 100} USD
               </td>
               <td
+                colSpan={2}
                 style={{
                   fontWeight: 600,
                   fontSize: "1.3em",
