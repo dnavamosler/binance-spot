@@ -1,8 +1,25 @@
 import Head from "next/head";
+import { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import styles2 from "../styles/Home.module.scss";
 
-export default function Home({ invertido = 0, ganancia = 0, monedas = [] }) {
+export default function Home(datos) {
+  // { invertido = 0, ganancia = 0, monedas = [] }
+  const [{ monedas, ganancia, invertido }, setValores] = useState(datos);
+
+  useEffect(() => {
+    setInterval(async () => {
+      const res = await fetch(
+        "https://us-central1-mc-remesas.cloudfunctions.net/obtainCurrency"
+      );
+      const {
+        data: { data, invertido, ganancia },
+      } = await res.json();
+
+      setValores({ monedas: data, invertido, ganancia });
+    }, 1000);
+  });
+
   return (
     <div className={styles.container}>
       <Head>
