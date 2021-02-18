@@ -3,10 +3,6 @@ import styles from "../styles/Home.module.css";
 import styles2 from "../styles/Home.module.scss";
 
 export default function Home({ invertido = 0, ganancia = 0, monedas = [] }) {
-  console.log(invertido);
-  console.log(ganancia);
-  console.log(monedas);
-
   return (
     <div className={styles.container}>
       <Head>

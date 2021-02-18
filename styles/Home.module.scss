@@ -1,5 +1,8 @@
 .contentTable{
   margin-top: 50px;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
   table{
     border-collapse: collapse;
     
@@ -29,4 +32,44 @@
 .mainCell{
   font-weight: 600;
   padding-left: 10px;
+}
+@media 
+only screen and (max-width: 500px),
+(min-device-width: 500px) and (max-device-width: 800px)  {
+
+  .contentTable{
+
+    table{
+      width: 100%;
+     transform: scale(calc(2/3));
+    }
+
+  }
+
+	
+	
+	
+	
+	
+	
+}
+@media 
+only screen and (max-width: 370px),
+(min-device-width: 370px) and (max-device-width: 500px)  {
+
+  .contentTable{
+
+    table{
+      width: 100%;
+     transform: scale(calc(1.3/3));
+    }
+
+  }
+
+	
+	
+	
+	
+	
+	
 }
