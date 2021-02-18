@@ -1,0 +1,32 @@
+.contentTable{
+  margin-top: 50px;
+  table{
+    border-collapse: collapse;
+    
+
+    tr,td{
+      border: 1px solid #01579b
+    }
+  }
+}
+
+.header{
+ padding:20px;
+ font-weight: 600;
+ color:white;
+ background-color: #0288d1;
+}
+
+.cell {
+  padding: 2px;
+  text-align: right;
+}
+.cellFinal { 
+  text-align: right;
+  font-weight: 400;
+  font-size: 1.3em;
+}
+.mainCell{
+  font-weight: 600;
+  padding-left: 10px;
+}

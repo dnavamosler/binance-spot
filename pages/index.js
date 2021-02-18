@@ -1,65 +1,80 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import styles2 from "../styles/Home.module.scss";
 
-export default function Home() {
+export default function Home({ invertido = 0, ganancia = 0, monedas = [] }) {
+  console.log(invertido);
+  console.log(ganancia);
+  console.log(monedas);
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Spot DANIEL NAVA</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Bienvenido al SPOT de <a href="#">Daniel Nava!</a>
         </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+        <div className={styles2.contentTable}>
+          <table>
+            <tr>
+              <td className={styles2.header}>MONEDA</td>
+              <td className={styles2.header}>INVERTIDO</td>
+              <td className={styles2.header}>CANTIDAD</td>
+              <td className={styles2.header}>GANANCIA</td>
+            </tr>
+            {monedas.map((moneda, i) => (
+              <tr key={i}>
+                <td className={styles2.mainCell}>{moneda.token}</td>
+                <td className={styles2.cell}>{moneda.invertido}</td>
+                <td className={styles2.cell}>{moneda.qt}</td>
+                <td
+                  className={styles2.cell}
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "1.1em",
+                    color: moneda.ganancia > 0 ? "#2e7d32" : "#c62828",
+                  }}
+                >
+                  {Math.round(moneda.ganancia * 100) / 100}
+                </td>
+              </tr>
+            ))}
+            <tr>
+              <td className={styles2.mainCell}>TOTAL</td>
+              <td colSpan={2} style={{ textAlign: "center" }}>
+                {Math.round(invertido * 100) / 100} USD
+              </td>
+              <td
+                style={{
+                  fontWeight: 600,
+                  fontSize: "1.3em",
+                  color: ganancia > 0 ? "#2e7d32" : "#c62828",
+                }}
+                className={styles2.cellFinal}
+              >
+                {Math.round(ganancia * 100) / 100} USD
+              </td>
+            </tr>
+          </table>
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+      <footer className={styles.footer}>Powered by Daniel Nava</footer>
     </div>
-  )
+  );
 }
+
+Home.getInitialProps = async (ctx) => {
+  const res = await fetch(
+    "https://us-central1-mc-remesas.cloudfunctions.net/obtainCurrency"
+  );
+  const {
+    data: { data, invertido, ganancia },
+  } = await res.json();
+
+  return { invertido, ganancia, monedas: data };
+};
