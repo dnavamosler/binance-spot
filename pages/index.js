@@ -39,7 +39,7 @@ export default function Home(datos) {
               <td className={styles2.header}>INVERTIDO</td>
               <td className={styles2.header}>CANTIDAD</td>
               <td className={styles2.header}>PRECIO</td>
-              <td className={styles2.header}>DOBLAR INVERSION</td>
+
               <td className={styles2.header}>GANANCIA * 0.1</td>
 
               <td className={styles2.header}>BALANCE</td>
@@ -51,14 +51,6 @@ export default function Home(datos) {
                   <td className={styles2.cell}>{moneda.invertido}</td>
                   <td className={styles2.cell}>{moneda.qt}</td>
                   <td className={styles2.cell}>{moneda.precioVenta}</td>{" "}
-                  <td className={styles2.cell}>
-                    {Math.round(
-                      ((moneda.precioVenta * (moneda.invertido * 2)) /
-                        moneda.invertido) *
-                        100
-                    ) / 100}{" "}
-                    $
-                  </td>{" "}
                   <td className={styles2.cell}>
                     {Math.round(0.1 * moneda.qt * 100) / 100}
                   </td>
@@ -81,7 +73,7 @@ export default function Home(datos) {
                 {Math.round(invertido * 100) / 100} USD
               </td>
               <td
-                colSpan={4}
+                colSpan={3}
                 style={{
                   fontWeight: 600,
                   fontSize: "1.3em",
