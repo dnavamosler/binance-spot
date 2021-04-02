@@ -4,13 +4,9 @@ import styles from "../styles/Home.module.css";
 import styles2 from "../styles/Home.module.scss";
 import hello from "./api/hello";
 
-export default function Home() {
+export default function Home(datos) {
   // { invertido = 0, ganancia = 0, monedas = [] }
-  const [{ monedas, ganancia, invertido }, setValores] = useState({
-    monedas: [],
-    invertido: 0,
-    ganancia: 0,
-  });
+  const [{ monedas, ganancia, invertido }, setValores] = useState(datos);
 
   useEffect(() => {
     setInterval(async () => {
@@ -91,3 +87,14 @@ export default function Home() {
     </div>
   );
 }
+
+Home.getInitialProps = async (ctx) => {
+  const res = await fetch(
+    "https://us-central1-mc-remesas.cloudfunctions.net/obtainCurrency"
+  );
+  const {
+    data: { data, invertido, ganancia },
+  } = await res.json();
+
+  return { invertido, ganancia, monedas: data };
+};
