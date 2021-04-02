@@ -18,7 +18,7 @@ export default function Home(datos) {
       } = await res.json();
 
       setValores({ monedas: data, invertido, ganancia });
-    }, 3000);
+    }, 1200);
   }, []);
 
   return (
