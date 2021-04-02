@@ -19,7 +19,7 @@ export default function Home(datos) {
 
       setValores({ monedas: data, invertido, ganancia });
     }, 3000);
-  });
+  }, []);
 
   return (
     <div className={styles.container}>
