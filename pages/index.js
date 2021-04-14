@@ -1,100 +1,82 @@
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import styles from "../styles/Home.module.css";
-import styles2 from "../styles/Home.module.scss";
-import hello from "./api/hello";
+import { useEffect, useMemo, useState } from "react";
+import useSwr from "swr";
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Home(datos) {
-  // { invertido = 0, ganancia = 0, monedas = [] }
-  const [{ monedas, ganancia, invertido }, setValores] = useState(datos);
+  const { data, error } = useSwr("/api/binance", fetcher, {
+    refreshInterval: 3000,
+  });
 
-  useEffect(() => {
-    setInterval(async () => {
-      const res = await fetch(
-        "https://us-central1-mc-remesas.cloudfunctions.net/obtainCurrency"
-      );
-      const {
-        data: { data, invertido, ganancia },
-      } = await res.json();
+  const headers = ["TOKEN", "INV", "QT", "PRICE", "BALANCE"];
 
-      setValores({ monedas: data, invertido, ganancia });
-    }, 5000);
-  }, []);
+  const BALANCE = useMemo(() => {
+    try {
+      return Math.round(data.reduce((a, b) => a + b.balance, 0) * 10) / 10;
+    } catch (error) {
+      return 0;
+    }
+  }, [data]);
 
+  if (!data && !error) {
+    return (
+      <div>
+        <span>cargando...</span>
+      </div>
+    );
+  }
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Spot DANIEL NAVA</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Bienvenido al SPOT de <a href="#">Daniel Nava!</a>
-        </h1>
-        <div className={styles2.contentTable}>
-          <table>
-            <tr>
-              <td className={styles2.header}>MONEDA</td>
-              <td className={styles2.header}>INVERTIDO</td>
-              <td className={styles2.header}>CANTIDAD</td>
-              <td className={styles2.header}>PRECIO</td>
-
-              <td className={styles2.header}>BALANCE</td>
-            </tr>
-            {monedas.map((moneda, i) => {
-              return (
-                <tr key={i}>
-                  <td className={styles2.mainCell}>{moneda.token}</td>
-                  <td className={styles2.cell}>{moneda.invertido}</td>
-                  <td className={styles2.cell}>{moneda.qt}</td>
-                  <td className={styles2.cell}>{moneda.precioVenta}</td>{" "}
-                  <td
-                    className={styles2.cell}
-                    style={{
-                      fontWeight: 600,
-                      fontSize: "1.1em",
-                      color: moneda.ganancia > 0 ? "#2e7d32" : "#c62828",
-                    }}
-                  >
-                    {Math.round(moneda.ganancia * 100) / 100}
-                  </td>
-                </tr>
-              );
-            })}
-            <tr>
-              <td className={styles2.mainCell}>TOTAL</td>
-              <td colSpan={2} style={{ textAlign: "center" }}>
-                {Math.round(invertido * 100) / 100} USD
-              </td>
-              <td
-                colSpan={2}
-                style={{
-                  fontWeight: 600,
-                  fontSize: "1.3em",
-                  color: ganancia > 0 ? "#2e7d32" : "#c62828",
-                }}
-                className={styles2.cellFinal}
-              >
-                {Math.round(ganancia * 100) / 100} USD
-              </td>
-            </tr>
-          </table>
+    <div className="flex justify-center flex-wrap bg-blue-200 absolute top-0 left-0 right-0 bottom-0">
+      <div className="w-full max-w-lg  mt-16  ">
+        <div className="grid grid-cols-5 bg-white rounded-lg shadow-lg py-2">
+          {headers.map((token) => (
+            <div
+              key={token}
+              className="p-2 border-b-2 text-right border-blue-700 text-sm text-blue-600 font-semibold"
+            >
+              {token}
+            </div>
+          ))}
+          {data.map((asset) => {
+            return (
+              <>
+                <div className="px-2 font-light border-b border-blue-200 text-right">
+                  {asset.asset}
+                </div>
+                <div className="px-2 border-b border-blue-200 text-right">
+                  {Math.round(asset.invertido * 10) / 10}
+                </div>
+                <div className="px-2 border-b border-blue-200 text-right">
+                  {Math.round(asset.qt * 100) / 100}
+                </div>
+                <div className="px-2 border-b border-blue-200 text-right">
+                  {Math.round(asset.precio * 1000) / 1000}
+                </div>
+                <div
+                  className={`px-2 border-b border-blue-200 text-right font-black ${
+                    asset.balance > 0 ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {Math.round(asset.balance * 10) / 10}
+                </div>
+              </>
+            );
+          })}
         </div>
-      </main>
 
-      <footer className={styles.footer}>Powered by Daniel Nava</footer>
+        <div className=" mt-10">
+          <h1 className="text-center text-blue-700 font-semibold">
+            BALANCE ACTUAL
+          </h1>
+          <p
+            className={`text-center font-bold text-4xl ${
+              BALANCE > 0 ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {BALANCE} USD
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
-
-Home.getInitialProps = async (ctx) => {
-  const res = await fetch(
-    "https://us-central1-mc-remesas.cloudfunctions.net/obtainCurrency"
-  );
-  const {
-    data: { data, invertido, ganancia },
-  } = await res.json();
-
-  return { invertido, ganancia, monedas: data };
-};
