@@ -21,6 +21,8 @@ export default function Home(datos) {
   const cargando = !data && !error;
   // const cargando = true;
 
+  const { data: name } = useSwr("/api/name", fetcher);
+
   return (
     <div className="flex justify-center flex-wrap bg-blue-200 absolute top-0 left-0 right-0 bottom-0">
       {cargando ? (
@@ -32,9 +34,9 @@ export default function Home(datos) {
               <div className="flex flex-col">
                 <span className="font-light text-center text-blue-600 text-lg">
                   Wallet
-                </span>{" "}
+                </span>
                 <span className="font-semibold text-center text-blue-800 text-2xl">
-                  Daniel Nava
+                  {name ? name.name : ""}
                 </span>
               </div>
             </div>

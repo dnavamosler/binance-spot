@@ -1,0 +1,22 @@
+{
+  "name": "Crypto wallet",
+  "short_name": "Crypto_wallet",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#90cdf4",
+  "theme_color": "#90cdf4",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/cardano-72.png",
+      "type": "image/png",
+      "sizes": "72x72"
+    },
+
+    {
+      "src": "/cardano-90.png",
+      "type": "image/png",
+      "sizes": "90x90"
+    }
+  ]
+}
