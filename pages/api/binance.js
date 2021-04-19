@@ -22,7 +22,7 @@ export default async function binance(req, res) {
           return true;
         }
       } else {
-        return false;
+        return true;
       }
     });
   //   BALANCES GENERALES
