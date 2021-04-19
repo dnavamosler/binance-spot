@@ -10,7 +10,21 @@ export default async function binance(req, res) {
   //   DATOS GENERALES DE LA CUENTA
   const DATOS_CUENTA = await client.accountInfo({ useServerTime: true });
   // BALANCES DE LA CUENTA (EXEPTO STAKING BLOQUEADO)
-  const balances = DATOS_CUENTA.balances.filter((item) => item.free > 0.001);
+  const balances = DATOS_CUENTA.balances
+    .filter((item) => item.free > 0.001)
+    .filter((item) => {
+      if (process.env.IGNORE) {
+        const IGNORES = JSON.parse(process.env.IGNORE);
+
+        if (IGNORES.find((item2) => item2 === item.asset)) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    });
   //   BALANCES GENERALES
   const balancesGenerales = await normalizarDatos(balances);
 
