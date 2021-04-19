@@ -23,6 +23,12 @@ export default function Home(datos) {
 
   const { data: name } = useSwr("/api/name", fetcher);
 
+  const getInvertido = (datos) =>
+    Math.round(datos.reduce((acc, cu) => acc + cu.invertido, 0) * 100) / 100;
+
+  const getPercentBalance = (invertido, balance) =>
+    Math.round(((100 * balance) / invertido) * 100) / 100;
+
   return (
     <div className="flex justify-center flex-wrap bg-blue-200 absolute top-0 left-0 right-0 bottom-0">
       {cargando ? (
@@ -75,6 +81,24 @@ export default function Home(datos) {
                 </>
               );
             })}
+            <div className="px-2 font-medium border-b border-blue-200 text-right">
+              Invertido:
+            </div>
+            <div className="px-2 font-bold border-b border-r border-blue-200 text-lg text-right">
+              {getInvertido(data)}
+            </div>
+            <div className="px-2 font-medium border-b border-blue-200 text-right">
+              Porcentaje:
+            </div>
+            <div
+              className={`px-2 font-bold border-b  border-blue-200 text-lg text-right col-span-2 ${
+                getPercentBalance(getInvertido(data), BALANCE) > 0
+                  ? "text-green-600"
+                  : "text-red-600"
+              }`}
+            >
+              {getPercentBalance(getInvertido(data), BALANCE)} %
+            </div>
           </div>
 
           <div className=" mt-10">
