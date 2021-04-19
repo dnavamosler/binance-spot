@@ -95,9 +95,11 @@ const buscarInversiones = async (datos) => {
         : a - parseFloat(b.quoteQty);
     }, 0);
 
-    const INITIAL = JSON.parse(process.env.INITIALS).find(
-      (item) => item.symbol === cu.asset
-    );
+    const INITIAL = process.env.INITIALS
+      ? JSON.parse(process.env.INITIALS).find(
+          (item) => item.symbol === cu.asset
+        )
+      : null;
 
     return {
       ...cu,
