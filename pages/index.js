@@ -66,7 +66,7 @@ export default function Home(datos) {
                     {Math.round(asset.invertido * 100) / 100}
                   </div>
                   <div className="px-2 border-b border-blue-200 text-right">
-                    {Math.round(asset.qt * 100) / 100}
+                    {Math.round(asset.qt * 1000) / 1000}
                   </div>
                   <div className="px-2 border-b border-blue-200 text-right">
                     {Math.round(asset.precio * 1000) / 1000}
